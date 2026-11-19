@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08090b">
+<title>10Y · 灵逸云科技 — 软件与硬件</title>
+<meta name="description" content="10Y·灵逸云科技，做 10Y OS、HY 硬件平台与开源的灵逸 MB。">
+<style>
+/*__TAILWIND_CSS__*/
+</style>
+<style>
+:root{
+  --bg:#08090b; --panel:#0e1013; --panel-2:#12151a; --line:#1e2229; --line-2:#2a2f38;
+  --ink:#f2f4f7; --sub:#9ba3ae; --dim:#6b727d; --accent:#18CCFC; --violet:#6344F5; --plum:#AE48FF;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg);color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+::selection{background:rgba(24,204,252,.28);color:#fff}
+
+/* ---------- Aceternity Background Beams (真实组件) ---------- */
+.beams{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.beams svg{position:absolute;inset:0;width:100%;height:100%;opacity:.85}
+.beams .mask{position:absolute;inset:0;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 30%,transparent 75%)}
+
+/* ---------- React Bits 风格 Dot Field ---------- */
+.dotfield{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.11) 1px,transparent 1px);
+  background-size:22px 22px;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.35) 55%,transparent 92%);
+  mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.35) 55%,transparent 92%);
+  opacity:.5}
+
+/* ---------- 布局 ---------- */
+.wrap{width:min(1180px,92vw);margin-inline:auto;position:relative;z-index:1}
+section{position:relative}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.h2{font-size:clamp(28px,4.2vw,46px);line-height:1.12;letter-spacing:-.03em;font-weight:650;margin:14px 0 0}
+.lead{color:var(--sub);font-size:clamp(15px,1.6vw,17px);line-height:1.75;max-width:640px}
+hr.sep{border:0;border-top:1px solid var(--line);margin:0}
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(8,9,11,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{height:66px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em}
+.brand .logo{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--violet));display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:#06121a;font-weight:800}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:14px;color:var(--sub)}
+.nav-links a{transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links .gh{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid var(--line-2);border-radius:9px;color:var(--ink)}
+.nav-links .gh:hover{border-color:var(--dim);background:#ffffff08}
+.toggle{display:none;width:40px;height:40px;border:1px solid var(--line-2);border-radius:9px;background:#0d0f12;color:var(--ink);font-size:18px;cursor:pointer}
+@media(max-width:820px){
+  .nav-links{position:absolute;top:66px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#0b0d10;border-bottom:1px solid var(--line);padding:8px 4vw;display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 6px;border-bottom:1px solid var(--line)}
+  .nav-links .gh{margin:10px 0;justify-content:center;border-bottom:0}
+  .toggle{display:grid;place-items:center}
+}
+
+/* ---------- Hero ---------- */
+.hero{padding:clamp(64px,10vw,120px) 0 90px;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,5vw,70px);align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:1.04;letter-spacing:-.045em;font-weight:680;margin:20px 0 0}
+.hero h1 .g{background:linear-gradient(100deg,var(--accent),#7ad9ff 40%,var(--plum));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin-top:24px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 22px;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .25s,border-color .2s,background .2s;position:relative;overflow:hidden}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#3aa8ff);color:#041019;box-shadow:0 8px 30px -8px rgba(24,204,252,.5)}
+.btn-primary:hover{box-shadow:0 12px 40px -8px rgba(24,204,252,.7)}
+.btn-ghost{border:1px solid var(--line-2);color:var(--ink);background:#ffffff06}
+.btn-ghost:hover{border-color:#4b525d;background:#ffffff0e}
+
+/* terminal / console card */
+.console{position:relative;border:1px solid var(--line-2);border-radius:16px;background:linear-gradient(180deg,#101318,#0b0d11);box-shadow:0 30px 80px -30px rgba(0,0,0,.9),0 0 0 1px #ffffff05 inset;overflow:hidden}
+.console .bars{display:flex;align-items:center;gap:7px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.console .dot{width:11px;height:11px;border-radius:50%}
+.console .ttl{font-family:var(--mono);font-size:11px;color:var(--dim);margin-left:6px}
+.console .body{padding:20px 18px 18px;font-family:var(--mono);font-size:13px;line-height:2}
+.ln{white-space:pre;display:flex;gap:14px}
+.ln .n{color:#454b55;user-select:none;width:18px;text-align:right}
+.c-kw{color:#c792ea}.c-fn{color:#82aaff}.c-st{color:#c3e88d}.c-num{color:#f78c6c}.c-cm{color:#5b6270}
+.matrix{display:grid;grid-template-columns:repeat(5,5px);gap:4px;margin:16px 0 4px 32px}
+.matrix i{width:5px;height:5px;border-radius:1px;background:#1c2129;display:block}
+.matrix i.on{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.status{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--sub)}
+.status .live{display:inline-flex;align-items:center;gap:7px;color:#7fe0a8}
+.status .live b{width:7px;height:7px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.scan{position:absolute;left:0;right:0;height:70px;top:-70px;background:linear-gradient(180deg,transparent,rgba(24,204,252,.07),transparent);pointer-events:none;animation:scan 6s linear infinite}
+@keyframes scan{0%{top:-70px}100%{top:100%}}
+
+/* ---------- Stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.stat{padding:28px 22px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .v{font-size:clamp(26px,3.5vw,38px);font-weight:680;letter-spacing:-.03em;font-family:var(--mono)}
+.stat .k{color:var(--dim);font-size:13px;margin-top:6px}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+/* ---------- Section paddings ---------- */
+.pad{padding:clamp(70px,10vw,120px) 0}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:48px}
+
+/* ---------- Spotlight cards (Aceternity 风格) ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.cards{grid-template-columns:1fr}}
+.card{position:relative;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:30px 26px;overflow:hidden;transition:border-color .3s,transform .3s}
+.card::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(24,204,252,.10),transparent 45%)}
+.card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.card:hover::before{opacity:1}
+.card .ic{width:42px;height:42px;border-radius:11px;border:1px solid var(--line-2);background:linear-gradient(145deg,#141820,#0e1116);display:grid;place-items:center;font-family:var(--mono);font-size:15px;color:var(--accent);margin-bottom:22px}
+.card h3{font-size:21px;font-weight:640;letter-spacing:-.02em;margin:0}
+.card .en{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;margin-top:5px}
+.card p{color:var(--sub);font-size:14px;line-height:1.7;margin:16px 0 20px}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-family:var(--mono)}
+.card .more{display:inline-flex;align-items:center;gap:7px;margin-top:22px;font-size:13px;color:var(--accent);font-weight:600}
+
+/* ---------- LingYi MB feature ---------- */
+.mb{background:linear-gradient(180deg,#0a0c0f,#08090b);border-block:1px solid var(--line)}
+.mb-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+@media(max-width:820px){.mb-head{grid-template-columns:1fr}}
+.grid-feat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:44px}
+@media(max-width:760px){.grid-feat{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){.grid-feat{grid-template-columns:1fr}}
+.feat{background:var(--panel);padding:26px 22px;min-height:118px}
+.feat .no{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.feat h4{font-size:15px;font-weight:600;margin:10px 0 0}
+.feat p{color:var(--dim);font-size:12.5px;line-height:1.6;margin:8px 0 0}
+.versions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.ver{font-family:var(--mono);font-size:12px;color:var(--sub);border:1px solid var(--line-2);border-radius:9px;padding:10px 14px;background:#ffffff04}
+.ver b{color:var(--ink);font-weight:600}
+
+/* ---------- About / list ---------- */
+.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,6vw,80px)}
+@media(max-width:860px){.about-grid{grid-template-columns:1fr}}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line);color:var(--sub);font-size:15px;line-height:1.6}
+.list li .idx{font-family:var(--mono);color:var(--accent);font-size:12px;padding-top:4px;flex:0 0 26px}
+
+/* ---------- Team ---------- */
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:760px){.team{grid-template-columns:repeat(2,1fr)}}
+.member{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:24px 20px}
+.member .av{width:46px;height:46px;border-radius:12px;background:linear-gradient(145deg,#1a1f27,#0f1216);border:1px solid var(--line-2);display:grid;place-items:center;font-family:var(--mono);font-weight:700;color:var(--accent);margin-bottom:18px}
+.member h4{margin:0;font-size:16px;font-weight:640}
+.member .role{color:var(--dim);font-size:12.5px;margin-top:6px;line-height:1.5}
+
+/* ---------- Contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+@media(max-width:820px){.contact-grid{grid-template-columns:1fr}}
+.clist{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.clist .row{background:var(--panel);padding:20px 22px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.clist .row .k{color:var(--dim);font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em}
+.clist .row .v{color:var(--ink);font-size:14px;text-align:right}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--line);padding:40px 0 50px;color:var(--dim);font-size:13px}
+.foot-in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;align-items:center}
+.foot-links{display:flex;flex-wrap:wrap;gap:20px}
+.foot-links a:hover{color:var(--ink)}
+
+.reveal{opacity:0;transform:translateY(16px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top"><span class="logo">10</span> 灵逸云科技</a>
+    <button class="toggle" id="toggle" aria-label="菜单" aria-expanded="false">☰</button>
+    <div class="nav-links" id="navlinks">
+      <a href="#about">关于</a>
+      <a href="#products">产品</a>
+      <a href="#mb">灵逸 MB</a>
+      <a href="#team">团队</a>
+      <a href="#contact">联系</a>
+      <a class="gh" href="https://github.com/10Y-LYY/LingYi-MB" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.68 5.4-5.24 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="beams"><div class="mask"><svg viewBox="0 0 696 316" preserveAspectRatio="xMidYMid slice" fill="none" id="beamsSvg"></svg></div></div>
+  <div class="dotfield"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow hero-an">10Y · LINGYI CLOUD · EST. 2024</span>
+      <h1><span class="hero-an">做能落到实处的</span><br><span class="g hero-an">软件与硬件</span></h1>
+      <p class="lead hero-an">我们是一个十七人的小团队，在郑州写代码、调硬件。从操作系统到安卓工具，做出来的东西自己能用，也愿意开放给别人用。</p>
+      <div class="hero-cta hero-an">
+        <a class="btn btn-primary" href="#products">看我们做的产品 <span>→</span></a>
+        <a class="btn btn-ghost" href="https://github.com/10Y-LYY/LingYi-MB" target="_blank" rel="noopener">读开源代码</a>
+      </div>
+    </div>
+    <div class="console hero-an" id="console">
+      <div class="bars">
+        <span class="dot" style="background:#ff5f57"></span>
+        <span class="dot" style="background:#febc2e"></span>
+        <span class="dot" style="background:#28c840"></span>
+        <span class="ttl">lingyi-mb / console</span>
+      </div>
+      <div class="scan"></div>
+      <div class="body">
+        <div class="ln"><span class="n">1</span><span><span class="c-kw">from</span> microbit <span class="c-kw">import</span> *</span></div>
+        <div class="ln"><span class="n">2</span><span>&nbsp;</span></div>
+        <div class="ln"><span class="n">3</span><span>display.show(<span class="c-fn">Image.HAPPY</span>)</span></div>
+        <div class="matrix" id="matrix"></div>
+        <div class="ln"><span class="n">4</span><span>display.scroll(<span class="c-st">"10Y"</span>)</span></div>
+        <div class="ln"><span class="n">5</span><span>music.play(<span class="c-fn">TONE</span>[:<span class="c-num">4</span>])</span></div>
+        <div class="status"><span class="live"><b></b> micro:bit V2 已连接</span><span>USB CDC · 115200</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap"><div class="stats">
+  <div class="stat"><div class="v" data-count="2024">2024</div><div class="k">成立年份</div></div>
+  <div class="stat"><div class="v"><span data-count="17">17</span>+</div><div class="k">团队成员</div></div>
+  <div class="stat"><div class="v" data-count="3">3</div><div class="k">在维护的产品</div></div>
+  <div class="stat"><div class="v">MIT</div><div class="k">开源协议</div></div>
+</div></div>
+
+<section class="pad" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow reveal">About Us</span>
+      <h2 class="h2 reveal">关于我们</h2>
+      <p class="lead reveal" style="margin-top:22px">10Y·灵逸云科技是一家位于郑州的技术团队，2024 年成立。我们做的东西偏底层：一套操作系统，一个智能硬件平台，还有把开发流程搬到手机上的工具。</p>
+    </div>
+    <div>
+      <ul class="list reveal">
+        <li><span class="idx">01</span><span>成立于 2024 年，总部在郑州</span></li>
+        <li><span class="idx">02</span><span>做操作系统、硬件平台与开发者工具</span></li>
+        <li><span class="idx">03</span><span>核心产品 10Y OS 与 HY 由团队自研</span></li>
+        <li><span class="idx">04</span><span>开源项目以 MIT 协议发布</span></li>
+      </ul>
+      <p class="reveal" style="color:var(--sub);font-size:14px;line-height:1.8;margin-top:22px">团队十七个人，大部分是工程师。习惯先把问题弄清楚，再动手写代码；产品做完自己也天天用，遇到问题就改。灵逸 MB 就是我们把自己需要的工具做出来、再开放出去的一个例子。代码、文档和更新记录都放在公开的地方，谁都能看。</p>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="products" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="eyebrow reveal">Products</span>
+        <h2 class="h2 reveal">我们的产品</h2>
+      </div>
+      <p class="lead reveal" style="margin:0">三条产品线，分别对应系统、硬件和开发工具。</p>
+    </div>
+    <div class="cards">
+      <article class="card reveal">
+        <div class="ic">OS</div>
+        <h3>10Y OS</h3>
+        <div class="en">Operating System</div>
+        <p>面向万物互联场景的操作系统，把 AI 能力和分布式架构做进系统层，让不同设备之间协作更顺畅。</p>
+        <div class="tags"><span class="tag">AI 原生交互</span><span class="tag">分布式协同</span><span class="tag">系统安全</span></div>
+        <div class="more">了解详情 →</div>
+      </article>
+      <article class="card reveal">
+        <div class="ic">HY</div>
+        <h3>HY 硬件平台</h3>
+        <div class="en">Hardware Platform</div>
+        <p>面向行业应用的智能硬件平台，把高性能计算和多种传感器融合在一起，便于扩展和二次开发。</p>
+        <div class="tags"><span class="tag">异构计算</span><span class="tag">多模态感知</span><span class="tag">工业级设计</span></div>
+        <div class="more">了解详情 →</div>
+      </article>
+      <article class="card reveal">
+        <div class="ic">MB</div>
+        <h3>灵逸 MB</h3>
+        <div class="en">Android · micro:bit V2</div>
+        <p>把 micro:bit V2 的编程、刷写和调试从电脑搬到手机上。OTG 直连开发板，一个 App 就能控制；源码在 GitHub 完全公开。</p>
+        <div class="tags"><span class="tag">MIT 开源</span><span class="tag">77 项工具</span><span class="tag">Material 3</span></div>
+        <div class="more"><a href="https://af8c03ac486ac1f4a.app.workbuddy.host/?sharecode=BFNXUHOSTL" target="_blank" rel="noopener">打开项目站 →</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="mb pad" id="mb">
+  <div class="wrap">
+    <div class="mb-head">
+      <div>
+        <span class="eyebrow reveal">LingYi MB / Open Source</span>
+        <h2 class="h2 reveal">灵逸 MB，把开发板<br>装进口袋</h2>
+      </div>
+      <div>
+        <p class="lead reveal" style="margin:0">以前要给 micro:bit 写程序，得开电脑、打开 MakeCode、把 .hex 拖进盘符，再用串口工具看输出。灵逸 MB 把这一整套流程放进安卓手机：连上板子就能写、能刷、能看实时数据。</p>
+        <div class="hero-cta reveal" style="margin-top:24px">
+          <a class="btn btn-primary" href="https://af8c03ac486ac1f4a.app.workbuddy.host/?sharecode=BFNXUHOSTL" target="_blank" rel="noopener">下载与使用说明 →</a>
+          <a class="btn btn-ghost" href="https://af8c03ac486ac1f4a.app.workbuddy.host/dev-docs.html?sharecode=BFNXUHOSTL" target="_blank" rel="noopener">开发者接口文档</a>
+        </div>
+      </div>
+    </div>
+    <div class="grid-feat reveal">
+      <div class="feat"><div class="no">01 / DISPLAY</div><h4>LED 点阵与图案</h4><p>在手机上编辑 5×5 点阵，实时推送到开发板显示。</p></div>
+      <div class="feat"><div class="no">02 / SOUND</div><h4>声音与旋律</h4><p>音调、节拍与自定义旋律，边写边听效果。</p></div>
+      <div class="feat"><div class="no">03 / SENSOR</div><h4>传感器读数</h4><p>加速度、温度等数据以图表形式实时呈现。</p></div>
+      <div class="feat"><div class="no">04 / INPUT</div><h4>A/B 按键</h4><p>远程触发按键事件，调试交互逻辑更方便。</p></div>
+      <div class="feat"><div class="no">05 / RADIO</div><h4>无线指针</h4><p>用手机充当无线输入设备，控制板载指针。</p></div>
+      <div class="feat"><div class="no">06 / FLASH</div><h4>固件刷写</h4><p>OTG 直连，一键把 .hex 刷进 micro:bit。</p></div>
+      <div class="feat"><div class="no">07 / SIM</div><h4>悬浮窗模拟器</h4><p>悬浮窗里模拟开发板，不连硬件也能预览。</p></div>
+      <div class="feat"><div class="no">08 / SCRIPT</div><h4>指令编排</h4><p>把常用操作排成序列，一次触发多条指令。</p></div>
+      <div class="feat"><div class="no">09 / GAME</div><h4>互动小游戏</h4><p>内置小游戏，用手机直接和开发板互动。</p></div>
+    </div>
+    <div class="versions reveal">
+      <div class="ver">当前版本 · <b>稳定版 v4.2.7</b></div>
+      <div class="ver">预览版 · <b>v4.2.62</b></div>
+      <div class="ver">开发版 · <b>v4.2.7</b></div>
+      <div class="ver">三个版本 · <b>可同时安装</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="team" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="eyebrow reveal">Team</span>
+        <h2 class="h2 reveal">十七个人，各管一摊</h2>
+      </div>
+      <p class="lead reveal" style="margin:0">碰到问题一起上。</p>
+    </div>
+    <div class="team">
+      <div class="member reveal"><div class="av">Y</div><h4>YBF</h4><div class="role">创始人 · CEO<br>负责 10Y OS 的研发</div></div>
+      <div class="member reveal"><div class="av">Z</div><h4>ZRA</h4><div class="role">首席架构师<br>HY 硬件平台负责人</div></div>
+      <div class="member reveal"><div class="av">H</div><h4>HSX</h4><div class="role">技术专家<br>负责其他技术项目</div></div>
+      <div class="member reveal"><div class="av">W</div><h4>WZX</h4><div class="role">项目总监<br>负责其他项目推进</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="contact" style="border-top:1px solid var(--line)">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="eyebrow reveal">Contact</span>
+      <h2 class="h2 reveal">有问题，<br>欢迎来找我们</h2>
+      <p class="lead reveal" style="margin-top:20px">合作、技术咨询，或者只是想反馈灵逸 MB 的一个 bug，都可以通过下面的方式联系。</p>
+      <div class="hero-cta reveal" style="margin-top:26px">
+        <a class="btn btn-primary" href="mailto:lyy10y@126.com">发邮件 →</a>
+      </div>
+    </div>
+    <div class="clist reveal">
+      <div class="row"><span class="k">Address</span><span class="v">郑州市郑东新区楷林 IFC D 座 1206 室</span></div>
+      <div class="row"><span class="k">Email</span><span class="v">lyy10y@126.com</span></div>
+      <div class="row"><span class="k">Phone</span><span class="v">19937879672</span></div>
+      <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/10Y-LYY/LingYi-MB" target="_blank" rel="noopener" style="color:var(--accent)">10Y-LYY/LingYi-MB</a></span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>做操作系统、硬件平台和开源工具。团队在郑州，代码公开。</div>
+    <div class="foot-links">
+      <a href="https://github.com/10Y-LYY/LingYi-MB" target="_blank" rel="noopener">GitHub 仓库</a>
+      <a href="https://af8c03ac486ac1f4a.app.workbuddy.host/?sharecode=BFNXUHOSTL" target="_blank" rel="noopener">下载与更新</a>
+      <a href="https://af8c03ac486ac1f4a.app.workbuddy.host/dev-docs.html?sharecode=BFNXUHOSTL" target="_blank" rel="noopener">开发者文档</a>
+    </div>
+    <div>© 2024–2026 10Y·灵逸云科技</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasAnime = typeof window.anime !== 'undefined';
+
+  // ---------- Aceternity Background Beams：真实 path 数据 ----------
+  // 取自 ui.aceternity.com/components/background-beams 组件源码
+  var paths=[];
+  for(var k=0;k<52;k++){
+    var x=-380+k*7, x2=x+66, c1=x+68, c1y=-189-k*8, cx=152+k*7, cy=343-k*8;
+    paths.push("M"+x+" "+c1y+"C"+x+" "+c1y+" "+(x+68)+" "+(-189-k*8)+" "+cx+" "+cy+"C"+(cx+464)+" "+(cy+127)+" "+(x2+684-380)+" "+(875-k*8)+" "+(x2+684-380)+" "+(875-k*8));
+  }
+  var svg=document.getElementById('beamsSvg');
+  var NS='http://www.w3.org/2000/svg';
+  var defs=document.createElementNS(NS,'defs');
+  var frag=document.createDocumentFragment();
+  // 用真实组件首段的路径（几何来自源码）
+  var realPaths=[
+    "M-380 -189C-380 -189 -312 216 152 343C616 470 684 875 684 875",
+    "M-373 -197C-373 -197 -305 208 159 335C623 462 691 867 691 867",
+    "M-366 -205C-366 -205 -298 200 166 327C630 454 698 859 698 859",
+    "M-359 -213C-359 -213 -291 192 173 319C637 446 705 851 705 851",
+    "M-352 -221C-352 -221 -284 184 180 311C644 438 712 843 712 843",
+    "M-345 -229C-345 -229 -277 176 187 303C651 430 719 835 719 835",
+    "M-338 -237C-338 -237 -270 168 194 295C658 422 726 827 726 827",
+    "M-331 -245C-331 -245 -263 160 201 287C665 414 733 819 733 819",
+    "M-324 -253C-324 -253 -256 152 208 279C672 406 740 811 740 811",
+    "M-317 -261C-317 -261 -249 144 215 271C679 398 747 803 747 803",
+    "M-310 -269C-310 -269 -242 136 222 263C686 390 754 795 754 795",
+    "M-303 -277C-303 -277 -235 128 229 255C693 382 761 787 761 787",
+    "M-296 -285C-296 -285 -228 120 236 247C700 374 768 779 768 779",
+    "M-289 -293C-289 -293 -221 112 243 239C707 366 775 771 775 771",
+    "M-282 -301C-282 -301 -214 104 250 231C714 358 782 763 782 763",
+    "M-275 -309C-275 -309 -207 96 257 223C721 350 789 755 789 755",
+    "M-268 -317C-268 -317 -200 88 264 215C728 342 796 747 796 747",
+    "M-261 -325C-261 -325 -193 80 271 207C735 334 803 739 803 739",
+    "M-254 -333C-254 -333 -186 72 278 199C742 326 810 731 810 731",
+    "M-247 -341C-247 -341 -179 64 285 191C749 318 817 723 817 723",
+    "M-240 -349C-240 -349 -172 56 292 183C756 310 824 715 824 715",
+    "M-233 -357C-233 -357 -165 48 299 175C763 302 831 707 831 707",
+    "M-226 -365C-226 -365 -158 40 306 167C770 294 838 699 838 699",
+    "M-219 -373C-219 -373 -151 32 313 159C777 286 845 691 845 691",
+    "M-212 -381C-212 -381 -144 24 320 151C784 278 852 683 852 683",
+    "M-205 -389C-205 -389 -137 16 327 143C791 270 859 675 859 675",
+    "M-198 -397C-198 -397 -130 8 334 135C798 262 866 667 866 667",
+    "M-191 -405C-191 -405 -123 0 341 127C805 254 873 659 873 659",
+    "M-184 -413C-184 -413 -116 -8 348 119C812 246 880 651 880 651",
+    "M-177 -421C-177 -421 -109 -16 355 111C819 238 887 643 887 643",
+    "M-170 -429C-170 -429 -102 -24 362 103C826 230 894 635 894 635",
+    "M-163 -437C-163 -437 -95 -32 369 95C833 222 901 627 901 627",
+    "M-156 -445C-156 -445 -88 -40 376 87C840 214 908 619 908 619",
+    "M-149 -453C-149 -453 -81 -48 383 79C847 206 915 611 915 611",
+    "M-142 -461C-142 -461 -74 -56 390 71C854 198 922 603 922 603",
+    "M-135 -469C-135 -469 -67 -64 397 63C861 190 929 595 929 595",
+    "M-128 -477C-128 -477 -60 -72 404 55C868 182 936 587 936 587",
+    "M-121 -485C-121 -485 -53 -80 411 47C875 174 943 579 943 579",
+    "M-114 -493C-114 -493 -46 -88 418 39C882 166 950 571 950 571",
+    "M-107 -501C-107 -501 -39 -96 425 31C889 158 957 563 957 563",
+    "M-100 -509C-100 -509 -32 -104 432 23C896 150 964 555 964 555",
+    "M-93 -517C-93 -517 -25 -112 439 15C903 142 971 547 971 547",
+    "M-86 -525C-86 -525 -18 -120 446 7C910 134 978 539 978 539",
+    "M-79 -533C-79 -533 -11 -128 453 -1C917 126 985 531 985 531",
+    "M-72 -541C-72 -541 -4 -136 460 -9C924 118 992 523 992 523",
+    "M-65 -549C-65 -549 3 -144 467 -17C931 110 999 515 999 515",
+    "M-58 -557C-58 -557 10 -152 474 -25C938 102 1006 507 1006 507",
+    "M-51 -565C-51 -565 17 -160 481 -33C945 94 1013 499 1013 499",
+    "M-44 -573C-44 -573 24 -168 488 -41C952 86 1020 491 1020 491",
+    "M-37 -581C-37 -581 31 -176 495 -49C959 78 1027 483 1027 483"
+  ];
+  realPaths.forEach(function(d,i){
+    var lg=document.createElementNS(NS,'linearGradient');
+    lg.setAttribute('id','lg-'+i);
+    lg.setAttribute('x1','0%');lg.setAttribute('x2','0%');lg.setAttribute('y1','0%');lg.setAttribute('y2','0%');
+    [['0%','#18CCFC','0'],['0%','#18CCFC','1'],['32.5%','#6344F5','1'],['100%','#AE48FF','0']].forEach(function(s){
+      var st=document.createElementNS(NS,'stop');
+      st.setAttribute('offset',s[0]);st.setAttribute('stop-color',s[1]);st.setAttribute('stop-opacity',s[2]);
+      lg.appendChild(st);
+    });
+    // Aceternity 源码参数：duration 10~20s，repeat Infinity，delay 0~10s
+    // 用原生 SMIL 驱动渐变坐标（等价于 motion.linearGradient 的 animate）
+    if(!reduce){
+      [['x1','0%','100%'],['x2','0%','95%'],['y1','0%','100%'],['y2','0%',(93+Math.random()*8)+'%']].forEach(function(a){
+        var an=document.createElementNS(NS,'animate');
+        an.setAttribute('attributeName',a[0]);
+        an.setAttribute('values',a[1]+';'+a[2]);
+        an.setAttribute('dur',(10+Math.random()*10)+'s');
+        an.setAttribute('begin','-'+(Math.random()*10)+'s');
+        an.setAttribute('repeatCount','indefinite');
+        an.setAttribute('calcMode','spline');
+        an.setAttribute('keySplines','0.42 0 0.58 1');
+        an.setAttribute('keyTimes','0;1');
+        lg.appendChild(an);
+      });
+    }
+    defs.appendChild(lg);
+    var p=document.createElementNS(NS,'path');
+    p.setAttribute('d',d);p.setAttribute('stroke','url(#lg-'+i+')');
+    p.setAttribute('stroke-opacity','0.55');p.setAttribute('stroke-width','0.5');p.setAttribute('fill','none');
+    frag.appendChild(p);
+  });
+  svg.appendChild(defs);svg.appendChild(frag);
+
+  // ---------- micro:bit 点阵 stagger 点亮（anime.js stagger） ----------
+  var matrix=document.getElementById('matrix');
+  var cells=[];
+  var pattern=[1,1,1,1,1, 1,0,0,0,1, 1,1,1,1,1, 1,0,0,0,1, 1,0,0,0,1]; // 5x5 "H"
+  for(var i=0;i<25;i++){
+    var el=document.createElement('i');
+    if(pattern[i])el.dataset.on='1';
+    matrix.appendChild(el);cells.push(el);
+  }
+  function lightMatrix(){
+    var on=cells.filter(function(c){return c.dataset.on});
+    if(hasAnime && !reduce){
+      anime.animate(on, {opacity:[0,1], scale:[0.4,1], delay:anime.stagger(45), duration:260, easing:'outQuad'});
+    } else { on.forEach(function(c){c.classList.add('on')}); }
+  }
+  setTimeout(lightMatrix, reduce?0:900);
+
+  // ---------- Hero 入场（一次，anime.js stagger） ----------
+  var heroAn=document.querySelectorAll('.hero-an');
+  if(hasAnime && !reduce){
+    anime.animate(heroAn, {opacity:[0,1], translateY:[18,0], delay:anime.stagger(90), duration:700, easing:'outCubic'});
+  } else { heroAn.forEach(function(e){e.style.opacity=1;e.style.transform='none'}); }
+
+  // ---------- 滚动 reveal（anime.js 驱动，一次） ----------
+  var rev=document.querySelectorAll('.reveal');
+  function show(el){
+    if(hasAnime && !reduce){ anime.animate(el, {opacity:[0,1], translateY:[16,0], duration:600, easing:'outCubic'}); }
+    else { el.style.opacity=1;el.style.transform='none'; }
+  }
+  if(reduce || !('IntersectionObserver' in window)){ rev.forEach(show); }
+  else {
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ show(e.target); io.unobserve(e.target); } });
+    },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+    rev.forEach(function(el){ io.observe(el); });
+  }
+
+  // ---------- 卡片 spotlight（Aceternity 风格，anime.js 平滑） ----------
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect();
+      card.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      card.style.setProperty('--my',(e.clientY-r.top)+'px');
+    });
+  });
+
+  // ---------- 导航折叠 ----------
+  var toggle=document.getElementById('toggle'), links=document.getElementById('navlinks');
+  toggle.addEventListener('click',function(){
+    var open=links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded',open?'true':'false');
+  });
+  links.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){
+    links.classList.remove('open');toggle.setAttribute('aria-expanded','false');
+  })});
+})();
+</script>
+</body>
+</html>
